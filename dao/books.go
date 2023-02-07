@@ -59,3 +59,8 @@ func GetBookByLabel(label string) (u []model.BookInfo, err error) {
 	}
 	return
 }
+
+func MarkBook(userID int, bookID int, page int, content string) (err error) {
+	_, err = DB.Exec("insert into mark(Id,bookId,pages,content) values (?,?,?,?)", userID, bookID, page, content)
+	return err
+}

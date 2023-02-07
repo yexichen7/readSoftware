@@ -29,3 +29,8 @@ func GetBookByLabel(label string) (u []model.BookInfo, err error) {
 	u, err = dao.GetBookByLabel(label)
 	return
 }
+
+func MarkBook(userID int, bookID int, page int, content string) (err error) {
+	err = dao.MarkBook(userID, bookID, page, content)
+	return err
+}

@@ -111,3 +111,45 @@ func GetBookByLabel(c *gin.Context) {
 	}
 	util.BookListRespSuccess(c, u)
 }
+
+func MarkBook(c *gin.Context) {
+	token := c.GetHeader("Authorization")
+	bookIdString := c.Query("book_id")
+	isExist, username, err := tool.TokenExpired([]byte("77"), token)
+	if err != nil {
+		log.Printf("search user error:%v", err)
+		util.NormErr(c, 60100, "token错误")
+		return
+	}
+	if !isExist {
+		util.NormErr(c, 60102, "token过期")
+		return
+	}
+	uUser, err := service.SearchUserByUserName(username)
+	if err != nil {
+		log.Printf("search user error:%v", err)
+		util.RsepInternalErr(c)
+		return
+	}
+	bookId, err := strconv.Atoi(bookIdString)
+	if err != nil {
+		log.Printf("search book error:%v", err)
+		util.NormErr(c, 70002, "book_id非法")
+		return
+	}
+	pageString := c.Query("page")
+	page, err := strconv.Atoi(pageString)
+	if err != nil {
+		log.Printf("search user error:%v", err)
+		util.RsepInternalErr(c)
+		return
+	}
+	content := c.Query("content")
+	err = service.MarkBook(uUser.Id, bookId, page, content)
+	if err != nil {
+		log.Printf("search book error:%v", err)
+		util.RsepInternalErr(c)
+		return
+	}
+	util.RespOK(c)
+}
