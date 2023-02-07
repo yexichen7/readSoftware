@@ -29,6 +29,15 @@ func SearchBookInfo(bookName string) (book model.BookInfo, err error) {
 	return
 }
 
+func GetBookMark(userID int, bookID int) (mark model.Mark, err error) {
+	row := DB.QueryRow("SELECT * FROM mark WHERE  Id= ? AND bookId = ?", userID, bookID)
+	if err = row.Err(); row.Err() != nil {
+		return
+	}
+	err = row.Scan(&mark.BookID, &mark.Name, &mark.Page, &mark.Content, &mark.ID)
+	return
+}
+
 func SearchUserStar(bookID int, userID int) (isStar bool, err error) {
 	row := DB.QueryRow("SELECT * FROM star WHERE  Id= ? AND bookId = ?", userID, bookID)
 	if err = row.Err(); row.Err() != nil {

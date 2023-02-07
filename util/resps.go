@@ -26,6 +26,16 @@ type bookInfo struct {
 	Book model.BookInfo `json:"book"`
 }
 
+type markResp struct {
+	Status int      `json:"status"`
+	Info   string   `json:"info"`
+	Data   markInfo `json:"data"`
+}
+
+type markInfo struct {
+	Mark model.Mark `json:"mark"`
+}
+
 func BookListRespSuccess(c *gin.Context, u []model.BookInfo) {
 	response := bookListResp{
 		Status: 10000,
@@ -40,6 +50,14 @@ func BookRespSuccess(c *gin.Context, u model.BookInfo) {
 		Status: 10000,
 		Info:   "success",
 		Data:   bookInfo{u},
+	}
+	c.JSON(http.StatusOK, response)
+}
+func BookMarkRespSuccess(c *gin.Context, u model.Mark) {
+	response := markResp{
+		Status: 10000,
+		Info:   "success",
+		Data:   markInfo{u},
 	}
 	c.JSON(http.StatusOK, response)
 }

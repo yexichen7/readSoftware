@@ -153,3 +153,43 @@ func MarkBook(c *gin.Context) {
 	}
 	util.RespOK(c)
 }
+func GetBookMark(c *gin.Context) {
+	token := c.GetHeader("Authorization")
+	bookName := c.Query("book_name")
+	uBook, err := service.SearchBook(bookName)
+	if err != nil {
+		if err.Error() == "sql: no rows in result set" {
+			util.NormErr(c, 70001, "该书尚未收录")
+			return
+		}
+		log.Printf("search book error:%v", err)
+		util.RsepInternalErr(c)
+		return
+	}
+
+	isExist, username, err := tool.TokenExpired([]byte("77"), token)
+	if err != nil {
+		log.Printf("search user error:%v", err)
+		util.NormErr(c, 60100, "token错误")
+		return
+	}
+	if !isExist {
+		util.NormErr(c, 60102, "token已过期")
+		return
+	}
+	uUser, err := service.SearchUserByUserName(username)
+	if err != nil {
+		log.Printf("search user error:%v", err)
+		util.RsepInternalErr(c)
+		return
+	}
+	u, err := service.GetBookMark(uUser.Id, uBook.BookId)
+	if err != nil {
+		log.Printf("search book error:%v", err)
+		util.RsepInternalErr(c)
+		return
+	}
+	util.BookMarkRespSuccess(c, u)
+}
+
+

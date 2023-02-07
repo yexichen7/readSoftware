@@ -34,3 +34,8 @@ func MarkBook(userID int, bookID int, page int, content string) (err error) {
 	err = dao.MarkBook(userID, bookID, page, content)
 	return err
 }
+
+func GetBookMark(userID int, bookID int) (mark model.Mark, err error) {
+	mark, err = dao.GetBookMark(userID, bookID)
+	return
+}

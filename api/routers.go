@@ -21,7 +21,8 @@ func InitRouter() {
 		book.GET("/search", SearchBookInfo)
 		book.PUT("/star", StarBook)
 		book.GET("/label", GetBookByLabel)
-		book.PUT("/bookmark", MarkBook)
+		book.PUT("/mark", MarkBook)
+		book.GET("/markInfo", GetBookMark)
 	}
 	comment := r.Group("/comment")
 	{
